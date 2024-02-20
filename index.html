@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;  }
+    </style>
+</head>
+<body>
+
+<script>
+
+  // Game config
+  var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+
+    scene: {
+      preload: preload,
+      create: create,
+      update: update
+    }
+  };
+
+  // Instantiate new phaser game
+  var game = new Phaser.Game(config);
+
+  var passarinho;
+
+  // Preload background and spritesheet
+  function preload() {
+    this.load.image('bg', 'assets/bg_space.png');
+    this.load.spritesheet('passaro', 'assets/bird-green.png', { frameWidth: 75, frameHeight: 75});
+  }
+
+  // Create images and animations
+  function create() {
+    this.add.image(400, 300, 'bg').setScale(1.2);
+    passarinho = this.add.sprite(100, 100, 'passaro').setScale(1.3);
+
+    this.anims.create({
+      key: 'fly',
+      frames: this.anims.generateFrameNumbers('passaro', { start: 0, end: 7 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    // Play passarinho animations
+    passarinho.anims.play("fly", true);
+  }
+
+  function update() {
+    // Quando passarinho estiver no x = 100, começa seu movimento em X positivo
+    if (passarinho.x === 100) {
+      passarinho.setFlip(false, false);
+      passarinho.ida = true;
+    }
+
+    if (passarinho.x < 700 && passarinho.ida)
+    {
+      console.log("Passarinho continua aumentando sua posicao em X enquanto X < 700");
+      passarinho.x += 5;
+    }
+
+    if (passarinho.x === 700) {
+      passarinho.setFlip(true, false);
+      passarinho.ida = false;
+    }
+
+    if (passarinho.x > 100 && passarinho.ida === false) {
+      console.log("Passarinho volta diminuindo sua posicao em X enquanto X > 100")
+      passarinho.x -= 5;
+    }
+
+    // Controle do eixo Y
+    if (passarinho.y === 100) {
+      passarinho.subida = true;
+    }
+
+    if (passarinho.y <= 500 && passarinho.subida)
+    {
+      passarinho.y += 5;
+    }
+
+    if (passarinho.y === 500) {
+      passarinho.subida = false;
+    }
+
+    if (passarinho.y >= 100 && passarinho.subida === false) {
+      passarinho.y -= 5;
+    }
+  }
+
+</script>
+
+</body>
+</html>
